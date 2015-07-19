@@ -20,7 +20,7 @@ interface Write
 	 * @return bool True on success, false on failure.
 	 * @throws FileExistsException
 	 */
-	boolean write(String path, String contents, Map<String, Object> config);
+	boolean write(String path, String contents, Config config);
 	boolean write(String path, String contents);
 
 
@@ -34,7 +34,7 @@ interface Write
 	 * @throws InvalidArgumentException If resource is not a file handle.
 	 * @throws FileExistsException
 	 */
-	boolean writeStream(String path, OutputStream resource, Map<String, Object> config);
+	boolean writeStream(String path, OutputStream resource, Config config);
 	boolean writeStream(String path, OutputStream resource);
 
 
@@ -47,6 +47,7 @@ interface Write
 	 * @throws FileNotFoundException
 	 */
 	boolean update(String path, String contents);
+	boolean update(String path, String contents, Config config);
 
 	/**
 	 * Update an existing file using a stream.
@@ -58,7 +59,7 @@ interface Write
 	 * @throws InvalidArgumentException If resource is not a file handle.
 	 * @throws FileNotFoundException
 	 */
-	boolean updateStream(String path, OutputStream resource, Map<String, Object> config);
+	boolean updateStream(String path, OutputStream resource, Config config);
 	boolean updateStream(String path, OutputStream resource);
 
 	/**
@@ -106,9 +107,10 @@ interface Write
 	 *
 	 * @param string dirname The name of the new directory.
 	 * @param array  config  An optional configuration array.
+	 * @param config
 	 * @return bool True on success, false on failure.
 	 */
-	boolean createDir(String dirname, Map<String, Object> config);
+	boolean createDir(String dirname, Config config);
 	boolean createDir(String dirname);
 
 	/**

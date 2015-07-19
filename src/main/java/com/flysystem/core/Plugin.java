@@ -5,6 +5,6 @@ package com.flysystem.core;
  */
 public interface Plugin
 {
-	public String getMethod();
+	String getMethod();  //fixme different implementation
 	Filesystem setFilesystem(Filesystem filesystem);
 }

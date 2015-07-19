@@ -12,7 +12,7 @@ interface Update
 	 * Create a file or update if exists.
 	 * @return bool True on success, false on failure.
 	 */
-	boolean put(String path, String contents, Map<String, Object> config);
+	boolean put(String path, String contents, Config config);
 	boolean put(String path, String contents);
 
 	/**

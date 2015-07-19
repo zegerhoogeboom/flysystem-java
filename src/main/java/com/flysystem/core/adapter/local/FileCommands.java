@@ -2,7 +2,7 @@ package com.flysystem.core.adapter.local;
 
 import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
-import com.flysystem.core.exception.FlywayGenericException;
+import com.flysystem.core.exception.FlysystemGenericException;
 import com.google.common.io.Files;
 import org.apache.commons.io.FileUtils;
 
@@ -15,11 +15,11 @@ import java.io.IOException;
 public class FileCommands
 {
 	/**
-	 * Interface to manipulate something from source to target.
+	 * Interface to manipulate something from a source to target file.
 	 */
 	public interface ManipulateFileCommand
 	{
-		void execute(File source, File target) throws FlywayGenericException;
+		void execute(File source, File target) throws FlysystemGenericException;
 	}
 
 	public static class CopyFileCommand implements ManipulateFileCommand
@@ -29,7 +29,7 @@ public class FileCommands
 			try {
 				FileUtils.copyFile(source, target);
 			} catch (IOException e) {
-				throw new FlywayGenericException(e);
+				throw new FlysystemGenericException(e);
 			}
 		}
 	}
@@ -41,7 +41,7 @@ public class FileCommands
 			try {
 				Files.move(source, target);
 			} catch (IOException e) {
-				throw new FlywayGenericException(e);
+				throw new FlysystemGenericException(e);
 			}
 		}
 	}

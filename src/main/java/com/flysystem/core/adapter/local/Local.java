@@ -1,12 +1,13 @@
 package com.flysystem.core.adapter.local;
 
+import com.flysystem.core.Config;
 import com.flysystem.core.FileMetadata;
 import com.flysystem.core.Filesystem;
 import com.flysystem.core.Visibility;
 import com.flysystem.core.adapter.AbstractAdapter;
 import com.flysystem.core.exception.DirectoryNotFoundException;
 import com.flysystem.core.exception.FileNotFoundException;
-import com.flysystem.core.exception.FlywayGenericException;
+import com.flysystem.core.exception.FlysystemGenericException;
 import com.google.common.io.Files;
 import org.apache.commons.io.FileUtils;
 
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Zeger Hoogeboom
@@ -33,7 +33,7 @@ public class Local extends AbstractAdapter
 		File realRoot = this.ensureDirectory(root);
 
 		if (! realRoot.isDirectory() || ! realRoot.canRead()) {
-			throw new FlywayGenericException(String.format("The root path %s is not readable.", realRoot.getAbsolutePath()));
+			throw new FlysystemGenericException(String.format("The root path %s is not readable.", realRoot.getAbsolutePath()));
 		}
 
 		try {
@@ -66,23 +66,20 @@ public class Local extends AbstractAdapter
 		if (!file.isDirectory()) {
 			new File(file.getParent()).mkdirs();
 		}
-
 		return file;
 	}
 
 	public boolean has(String path)
 	{
-		String location = this.applyPathPrefix(path);
-		return new File(location).exists();
+		return new File(applyPathPrefix(path)).exists();
 	}
 
 	public String read(String path) throws FileNotFoundException
 	{
-		String location = this.applyPathPrefix(path);
 		try {
-			return Files.toString(new File(location), Charset.defaultCharset());
+			return Files.toString(getExistingFile(path), Charset.defaultCharset());
 		} catch (IOException e) {
-			throw new FileNotFoundException(location);
+			throw new FlysystemGenericException(e);
 		}
 	}
 
@@ -93,7 +90,7 @@ public class Local extends AbstractAdapter
 
 	public List<com.flysystem.core.File> listContents(Filesystem filesystem, String directory, boolean recursive)
 	{
-		List<File> files = (List<File>) FileUtils.listFiles(new File(applyPathPrefix(directory)), null, recursive);
+		List<File> files = (List<File>) FileUtils.listFiles(getExistingFile(directory), null, recursive);
 		return LocalFileConverter.doConvert(filesystem, files, getPathPrefix());
 	}
 
@@ -104,16 +101,12 @@ public class Local extends AbstractAdapter
 
 	public FileMetadata getMetadata(String path) throws FileNotFoundException
 	{
-		File file = new File(applyPathPrefix(path));
-		if (!file.exists()) throw new FileNotFoundException(file.getPath());
-		return new BasicFileAttributesConverter().convert(file);
+		return new BasicFileAttributesConverter().convert(getExistingFile(path));
 	}
 
 	public long getSize(String path)
 	{
-		File file = new File(path);
-		if (!file.isFile()) throw new FileNotFoundException(path);
-		return file.length();
+		return getExistingFile(path).length();
 	}
 
 	public String getMimetype(String path)
@@ -123,7 +116,7 @@ public class Local extends AbstractAdapter
 
 	public long getTimestamp(String path)
 	{
-		return new File(path).lastModified();
+		return getExistingFile(path).lastModified();
 	}
 
 	public String getVisibility(String path)
@@ -131,23 +124,24 @@ public class Local extends AbstractAdapter
 		return null;
 	}
 
-	public boolean write(String path, String contents, Map<String, Object> config)
+	public boolean write(String path, String contents, Config config)
 	{
-		return false;
+		try {
+			File file = new File(applyPathPrefix(path));
+			setPermissions(file, config);
+			FileUtils.write(file, contents);
+			return true;
+		} catch (IOException e) {
+			throw new FlysystemGenericException(e);
+		}
 	}
 
 	public boolean write(String path, String contents)
 	{
-		File file = new File(applyPathPrefix(path));
-		try {
-			FileUtils.write(file, contents);
-			return true;
-		} catch (IOException e) {
-			throw new FlywayGenericException(e);
-		}
+   	    return write(path, contents, new Config());
 	}
 
-	public boolean writeStream(String path, OutputStream resource, Map<String, Object> config)
+	public boolean writeStream(String path, OutputStream resource, Config config)
 	{
 		return false;
 	}
@@ -159,15 +153,22 @@ public class Local extends AbstractAdapter
 
 	public boolean update(String path, String contents)
 	{
+		return update(path, contents, new Config());
+	}
+
+	public boolean update(String path, String contents, Config config)
+	{
 		try {
-			FileUtils.write(new File(applyPathPrefix(path)), contents);
+			File existingFile = getExistingFile(path);
+			setPermissions(existingFile, config);
+			FileUtils.write(existingFile, contents);
 			return true;
 		} catch (IOException e) {
-			throw new FlywayGenericException(e);
+			throw new FlysystemGenericException(e);
 		}
 	}
 
-	public boolean updateStream(String path, OutputStream resource, Map<String, Object> config)
+	public boolean updateStream(String path, OutputStream resource, Config config)
 	{
 		return false;
 	}
@@ -205,42 +206,50 @@ public class Local extends AbstractAdapter
 		try {
 			FileUtils.deleteDirectory(directory);
 		} catch (IOException e) {
-			throw new FlywayGenericException(e);
+			throw new FlysystemGenericException(e);
 		}
 		return false;
 	}
 
-	public boolean createDir(String dirname, Map<String, Object> config)
+	public boolean createDir(String dirname, Config config)
 	{
-		return false;
+		File file = new File(applyPathPrefix(dirname));
+		setPermissions(file, config);
+		return file.mkdirs();
 	}
 
 	public boolean createDir(String dirname)
 	{
-		return new File(applyPathPrefix(dirname)).mkdirs();
+		return createDir(dirname, new Config());
 	}
 
+	private void setPermissions(File file, Config config)
+	{
+		Visibility visibility = (Visibility) config.get("visibility", Visibility.PUBLIC);
+		setVisibility(file.getPath(), visibility);
+	}
+
+	@Override
 	public boolean setVisibility(String path, Visibility visibility)
 	{
+		File file = new File(applyPathPrefix(path));
 		switch (visibility) {
-			case PRIVATE: return setVisibilityPrivate(path);
-			case PUBLIC: return setVisibilityPublic(path);
+			case PRIVATE: return setVisibilityPrivate(file);
+			case PUBLIC: return setVisibilityPublic(file);
 			default: return false;
 		}
 	}
 
-	private boolean setVisibilityPrivate(String path)
+	private boolean setVisibilityPrivate(File file)
 	{
-		File file = new File(path);
 		boolean readable = file.setReadable(true, true);
 		boolean executable = file.setExecutable(true, true);
 		boolean writable = file.setWritable(true, true);
 		return readable && executable && writable;
 	}
 
-	private boolean setVisibilityPublic(String path)
+	private boolean setVisibilityPublic(File file)
 	{
-		File file = new File(path);
 		boolean readable = file.setReadable(true, false);
 		boolean executable = file.setExecutable(true, false);
 		boolean writable = file.setWritable(true, false);
@@ -250,6 +259,13 @@ public class Local extends AbstractAdapter
 	private void validateIsDirectoryAndExists(File file) throws DirectoryNotFoundException
 	{
 		if (!file.exists() || !file.isDirectory()) throw new DirectoryNotFoundException(file.getPath());
+	}
+
+	private File getExistingFile(String path)
+	{
+		File file = new File(applyPathPrefix(path));
+		if (!file.exists()) throw new FileNotFoundException(file.getPath());
+		return file;
 	}
 
 }

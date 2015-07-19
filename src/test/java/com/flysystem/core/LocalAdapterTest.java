@@ -163,4 +163,19 @@ public class LocalAdapterTest
 	{
 		adapter.rename("nonexisting.txt", "stillnonexisting.txt");
 	}
+
+	@Test
+	public void updateContents()
+	{
+		adapter.write("temp.txt", "foo");
+		adapter.update("temp.txt", "bar");
+		assertEquals("bar", adapter.read("temp.txt"));
+		adapter.delete("temp.txt");
+	}
+
+	@Test(expected = FileNotFoundException.class)
+	public void updateContentsOfNonExistingFile()
+	{
+		adapter.update("nonexisting.txt", "bar");
+	}
 }

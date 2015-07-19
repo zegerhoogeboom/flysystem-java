@@ -16,6 +16,11 @@ public class Config
 		this.settings = settings;
 	}
 
+	public Config()
+	{
+		this.settings = new HashMap<>();
+	}
+
 	public static Config withVisibility(final Visibility visibility)
 	{
 		return new Config(new HashMap<String, Object>() {{
@@ -55,4 +60,6 @@ public class Config
 		this.fallback = fallback;
 		return this;
 	}
+
+
 }

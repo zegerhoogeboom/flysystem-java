@@ -3,7 +3,7 @@ package com.flysystem.core.exception;
 /**
  * @author Zeger Hoogeboom
  */
-public class FileNotFoundException extends FlywayGenericException
+public class FileNotFoundException extends FlysystemGenericException
 {
 	public FileNotFoundException(String path)
 	{

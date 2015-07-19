@@ -8,7 +8,6 @@ import com.flysystem.core.adapter.AbstractAdapter;
 
 import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Zeger Hoogeboom
@@ -60,7 +59,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return null;
 	}
 
-	public boolean write(String path, String contents, Map<String, Object> config)
+	public boolean write(String path, String contents, Config config)
 	{
 		return false;
 	}
@@ -70,7 +69,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean writeStream(String path, OutputStream resource, Map<String, Object> config)
+	public boolean writeStream(String path, OutputStream resource, Config config)
 	{
 		return false;
 	}
@@ -90,7 +89,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean updateStream(String path, OutputStream resource, Map<String, Object> config)
+	public boolean updateStream(String path, OutputStream resource, Config config)
 	{
 		return false;
 	}
@@ -120,7 +119,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean createDir(String dirname, Map<String, Object> config)
+	public boolean createDir(String dirname, Config config)
 	{
 		return false;
 	}
