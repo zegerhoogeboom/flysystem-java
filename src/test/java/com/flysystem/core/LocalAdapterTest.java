@@ -27,7 +27,6 @@ import com.flysystem.core.exception.DirectoryNotFoundException;
 import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.flysystem.core.util.FlysystemTestUtil;
-import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,9 +34,8 @@ import java.io.IOException;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.hamcrest.Matchers.hasItem;
+import static org.junit.Assert.*;
 
 /**
  * @author Zeger Hoogeboom
@@ -129,7 +127,7 @@ public class LocalAdapterTest
 	public void listContents()
 	{
 		List<FileMetadata> files = adapter.listContents("");
-		assertThat(files, CoreMatchers.hasItem(new FileMetadata(example)));
+		assertThat(files, hasItem(new FileMetadata(example)));
 	}
 
 	@Test
