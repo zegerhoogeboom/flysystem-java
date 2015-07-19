@@ -8,13 +8,11 @@ import org.hamcrest.CoreMatchers;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.io.*;
+import java.io.IOException;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 
 /**
  * @author Zeger Hoogeboom
@@ -110,9 +108,48 @@ public class LocalAdapterTest
 	}
 
 	@Test
-	public void metadata()
+	public void metadataShouldBeFilled()
 	{
 		FileMetadata metadata = adapter.getMetadata(example);
-		metadata.getMimetype();
+		assertEquals(FlysystemTestUtil.getRoot() + example, metadata.getPath());
+		assertEquals("file", metadata.getType());
+		assertEquals(4l, (long) metadata.getSize()); //file contains the string "test"
+	}
+
+	@Test(expected = FileNotFoundException.class)
+	public void getMetadataOfNonExistingFile()
+	{
+		adapter.getMetadata("nonexisting.txt");
+	}
+
+	@Test
+	public void renameShouldSucceed()
+	{
+		assertFalse(adapter.has("renamed.txt"));
+		adapter.write("temp.txt", "temp");
+		adapter.rename("temp.txt", "renamed.txt");
+		assertTrue(adapter.has("renamed.txt"));
+		adapter.delete("renamed.txt");
+	}
+
+	@Test
+	public void renameToExistingFile()
+	{
+		adapter.write("temp1.txt", "temp1");
+		adapter.write("temp2.txt", "temp2");
+		adapter.rename("temp1.txt", "temp2.txt");
+		assertEquals("temp1", adapter.read("temp2.txt"));
+		adapter.delete("temp1.txt");
+		adapter.delete("temp2.txt");
+	}
+
+	@Test
+	public void renameToNonExistingDirectory()
+	{
+		adapter.write("temp.txt", "temp");
+		assertTrue(adapter.rename("temp.txt", "newdirectory/temp.txt"));
+		assertTrue(adapter.has("newdirectory/temp.txt"));
+		adapter.delete("temp.txt");
+		adapter.deleteDir("newdirectory");
 	}
 }

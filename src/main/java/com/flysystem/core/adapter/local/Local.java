@@ -66,6 +66,7 @@ public class Local extends AbstractAdapter
 		if (!file.isDirectory()) {
 			new File(file.getParent()).mkdirs();
 		}
+
 		return file;
 	}
 
@@ -103,7 +104,9 @@ public class Local extends AbstractAdapter
 
 	public FileMetadata getMetadata(String path) throws FileNotFoundException
 	{
-		return new BasicFileAttributesConverter().convert(new File(applyPathPrefix(path)));
+		File file = new File(applyPathPrefix(path));
+		if (!file.exists()) throw new FileNotFoundException(file.getPath());
+		return new BasicFileAttributesConverter().convert(file);
 	}
 
 	public long getSize(String path)
@@ -174,9 +177,16 @@ public class Local extends AbstractAdapter
 		return false;
 	}
 
-	public boolean rename(String path, String newpath)
+	public boolean rename(String from, String to)
 	{
-		return false;
+		File target = new File(applyPathPrefix(to));
+		ensureDirectory(target);
+		try {
+			Files.move(new File(applyPathPrefix(from)), target);
+			return true;
+		} catch (IOException e) {
+			throw new FlywayGenericException(e);
+		}
 	}
 
 	public boolean copy(String path, String newpath)

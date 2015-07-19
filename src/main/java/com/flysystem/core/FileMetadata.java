@@ -1,5 +1,7 @@
 package com.flysystem.core;
 
+import java.io.File;
+
 /**
  * @author Zeger Hoogeboom
  */
@@ -80,5 +82,10 @@ public class FileMetadata
 	public void setType(String type)
 	{
 		this.type = type;
+	}
+
+	public File getFile()
+	{
+		return new File(path);
 	}
 }

@@ -16,6 +16,13 @@ public class Config
 		this.settings = settings;
 	}
 
+	public static Config withVisibility(final Visibility visibility)
+	{
+		return new Config(new HashMap<String, Object>() {{
+			put("visibility", visibility);
+		}});
+	}
+
 	public Object get(String key, Object defaultValue)
 	{
 		if (! this.settings.containsKey(key)) {
