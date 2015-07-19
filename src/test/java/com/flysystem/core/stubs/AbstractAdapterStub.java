@@ -1,5 +1,6 @@
 package com.flysystem.core.stubs;
 
+import com.flysystem.core.Config;
 import com.flysystem.core.FileMetadata;
 import com.flysystem.core.Filesystem;
 import com.flysystem.core.Visibility;
@@ -79,7 +80,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean update(String path, String contents, Map<String, Object> config)
+	public boolean update(String path, String contents, Config config)
 	{
 		return false;
 	}
@@ -99,14 +100,14 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean rename(String path, String newpath)
+	public void rename(String from, String to)
 	{
-		return false;
+
 	}
 
-	public boolean copy(String path, String newpath)
+	public void copy(String path, String newpath)
 	{
-		return false;
+
 	}
 
 	public boolean delete(String path)

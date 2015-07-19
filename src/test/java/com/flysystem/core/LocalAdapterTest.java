@@ -2,6 +2,7 @@ package com.flysystem.core;
 
 import com.flysystem.core.adapter.local.Local;
 import com.flysystem.core.exception.DirectoryNotFoundException;
+import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.flysystem.core.util.FlysystemTestUtil;
 import org.hamcrest.CoreMatchers;
@@ -132,24 +133,34 @@ public class LocalAdapterTest
 		adapter.delete("renamed.txt");
 	}
 
-	@Test
+	@Test(expected = FileExistsException.class)
 	public void renameToExistingFile()
 	{
 		adapter.write("temp1.txt", "temp1");
 		adapter.write("temp2.txt", "temp2");
-		adapter.rename("temp1.txt", "temp2.txt");
-		assertEquals("temp1", adapter.read("temp2.txt"));
-		adapter.delete("temp1.txt");
-		adapter.delete("temp2.txt");
+
+		try {
+			adapter.rename("temp1.txt", "temp2.txt");
+		} catch (FileExistsException e) {
+			adapter.delete("temp1.txt");
+			adapter.delete("temp2.txt");
+			throw e;
+		}
 	}
 
 	@Test
 	public void renameToNonExistingDirectory()
 	{
 		adapter.write("temp.txt", "temp");
-		assertTrue(adapter.rename("temp.txt", "newdirectory/temp.txt"));
+		adapter.rename("temp.txt", "newdirectory/temp.txt");
 		assertTrue(adapter.has("newdirectory/temp.txt"));
 		adapter.delete("temp.txt");
 		adapter.deleteDir("newdirectory");
+	}
+
+	@Test(expected = FileNotFoundException.class)
+	public void renameNonExistingFile()
+	{
+		adapter.rename("nonexisting.txt", "stillnonexisting.txt");
 	}
 }

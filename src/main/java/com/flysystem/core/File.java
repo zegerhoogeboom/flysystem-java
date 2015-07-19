@@ -1,5 +1,6 @@
 package com.flysystem.core;
 
+import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.google.common.base.Optional;
 
@@ -65,7 +66,6 @@ public class File extends Handler
 	 * Write the new file using a stream.
 	 *
 	 * @param resource resource
-	 *
 	 * @return bool success boolean
 	 */
 	public boolean writeStream(OutputStream resource)
@@ -75,6 +75,7 @@ public class File extends Handler
 
 	/**
 	 * Update the file contents.
+	 *
 	 * @return bool success boolean
 	 */
 	public boolean update(String content)
@@ -86,7 +87,6 @@ public class File extends Handler
 	 * Update the file contents with a stream.
 	 *
 	 * @param resource resource
-	 *
 	 * @return bool success boolean
 	 */
 	public boolean updateStream(OutputStream resource)
@@ -108,7 +108,6 @@ public class File extends Handler
 	 * Create the file or update if exists using a stream.
 	 *
 	 * @param resource resource
-	 *
 	 * @return bool success boolean
 	 */
 	public boolean putStream(OutputStream resource)
@@ -123,12 +122,13 @@ public class File extends Handler
 	 */
 	public boolean rename(String newpath)
 	{
-		if (this.filesystem.rename(this.path, newpath)) {
+		try {
+			this.filesystem.rename(this.path, newpath);
 			this.path = newpath;
 			return true;
+		} catch (FileExistsException | FileNotFoundException e) {
+			return false;
 		}
-
-		return false;
 	}
 
 	/**
@@ -138,11 +138,12 @@ public class File extends Handler
 	 */
 	public Optional<File> copy(String newpath)
 	{
-		if (this.filesystem.copy(this.path, newpath)) {
+		try {
+			this.filesystem.copy(this.path, newpath);
 			return Optional.of(new File(this.filesystem, newpath));
+		} catch (FileExistsException | FileNotFoundException e) {
+			return Optional.absent();
 		}
-
-		return Optional.absent();
 	}
 
 	/**

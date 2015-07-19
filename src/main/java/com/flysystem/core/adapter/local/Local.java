@@ -157,14 +157,14 @@ public class Local extends AbstractAdapter
 		return false;
 	}
 
-	public boolean update(String path, String contents, Map<String, Object> config)
-	{
-		return false;
-	}
-
 	public boolean update(String path, String contents)
 	{
-		return false;
+		try {
+			FileUtils.write(new File(applyPathPrefix(path)), contents);
+			return true;
+		} catch (IOException e) {
+			throw new FlywayGenericException(e);
+		}
 	}
 
 	public boolean updateStream(String path, OutputStream resource, Map<String, Object> config)
@@ -177,30 +177,19 @@ public class Local extends AbstractAdapter
 		return false;
 	}
 
-	public boolean rename(String from, String to)
+
+	public void rename(String from, String to)
 	{
+		File source = new File(applyPathPrefix(from));
 		File target = new File(applyPathPrefix(to));
-		ensureDirectory(target);
-		try {
-			Files.move(new File(applyPathPrefix(from)), target);
-			return true;
-		} catch (IOException e) {
-			throw new FlywayGenericException(e);
-		}
+		FileCommands.manipulate(this, source, target, new FileCommands.MoveFileCommand());
 	}
 
-	public boolean copy(String path, String newpath)
+	public void copy(String path, String newpath)
 	{
-		File source = new File(this.applyPathPrefix(path));
-		validateIsFileAndExists(source);
-		File destination = new File(this.applyPathPrefix(newpath));
-		this.ensureDirectory(destination);
-		try {
-			FileUtils.copyFile(source, destination);
-			return true;
-		} catch (IOException e) {
-			throw new FlywayGenericException(e);
-		}
+		File source = new File(applyPathPrefix(path));
+		File destination = new File(applyPathPrefix(newpath));
+		FileCommands.manipulate(this, source, destination, new FileCommands.CopyFileCommand());
 	}
 
 	public boolean delete(String path)
@@ -263,8 +252,4 @@ public class Local extends AbstractAdapter
 		if (!file.exists() || !file.isDirectory()) throw new DirectoryNotFoundException(file.getPath());
 	}
 
-	private void validateIsFileAndExists(File file) throws FileNotFoundException
-	{
-		if (!file.exists() || !file.isFile()) throw new FileNotFoundException(file.getPath());
-	}
 }

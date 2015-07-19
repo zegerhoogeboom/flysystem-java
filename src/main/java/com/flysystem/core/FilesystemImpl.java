@@ -13,10 +13,12 @@ public class FilesystemImpl implements Filesystem
 {
 
 	private Adapter adapter;
+	private Config config;
 
-	public FilesystemImpl(Adapter adapter)
+	public FilesystemImpl(Adapter adapter, Config config)
 	{
 		this.adapter = adapter;
+		this.config = config;
 	}
 
 	public Handler get(String path, Handler handler)
@@ -119,7 +121,7 @@ public class FilesystemImpl implements Filesystem
 		return false;
 	}
 
-	public boolean update(String path, String contents, Map<String, Object> config)
+	public boolean update(String path, String contents, Config config)
 	{
 		return false;
 	}
@@ -139,14 +141,13 @@ public class FilesystemImpl implements Filesystem
 		return false;
 	}
 
-	public boolean rename(String path, String newpath)
+	public void rename(String from, String to)
 	{
-		return false;
 	}
 
-	public boolean copy(String path, String newpath)
+	public void copy(String path, String newpath)
 	{
-		return false;
+
 	}
 
 	public boolean delete(String path)

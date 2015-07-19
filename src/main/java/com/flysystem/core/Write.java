@@ -1,5 +1,8 @@
 package com.flysystem.core;
 
+import com.flysystem.core.exception.FileExistsException;
+import com.flysystem.core.exception.FileNotFoundException;
+
 import java.io.OutputStream;
 import java.util.Map;
 
@@ -11,9 +14,9 @@ interface Write
 	/**
 	 * Write a new file.
 	 *
-	 * @param string String path     The path of the new file.
-	 * @param string contents The file contents.
-	 * @param array  config   A configuration array.
+	 * @param path     The path of the new file.
+	 * @param contents The file contents.
+	 * @param config   A configuration array.
 	 * @return bool True on success, false on failure.
 	 * @throws FileExistsException
 	 */
@@ -24,9 +27,9 @@ interface Write
 	/**
 	 * Write a new file using a stream.
 	 *
-	 * @param string   String path     The path of the new file.
+	 * @param path     The path of the new file.
 	 * @param resource resource The file handle.
-	 * @param array    config   An optional configuration array.
+	 * @param config   An optional configuration array.
 	 * @return bool True on success, false on failure.
 	 * @throws InvalidArgumentException If resource is not a file handle.
 	 * @throws FileExistsException
@@ -38,21 +41,19 @@ interface Write
 	/**
 	 * Update an existing file.
 	 *
-	 * @param string String path     The path of the existing file.
-	 * @param string contents The file contents.
-	 * @param array  config   An optional configuration array.
+	 * @param path     The path of the existing file.
+	 * @param contents The file contents.
 	 * @return bool True on success, false on failure.
 	 * @throws FileNotFoundException
 	 */
-	boolean update(String path, String contents, Map<String, Object> config);
 	boolean update(String path, String contents);
 
 	/**
 	 * Update an existing file using a stream.
 	 *
-	 * @param string   String path     The path of the existing file.
+	 * @param path     The path of the existing file.
 	 * @param resource resource The file handle.
-	 * @param array    config   An optional configuration array.
+	 * @param config   An optional configuration array.
 	 * @return bool True on success, false on failure.
 	 * @throws InvalidArgumentException If resource is not a file handle.
 	 * @throws FileNotFoundException
@@ -63,24 +64,24 @@ interface Write
 	/**
 	 * Rename a file.
 	 *
-	 * @param string String path    Path to the existing file.
-	 * @param string newpath The new path of the file.
+	 * @param from    Path to the existing file.
+	 * @param to The new path of the file.
 	 * @return bool True on success, false on failure.
 	 * @throws FileExistsException   Thrown if newpath exists.
 	 * @throws FileNotFoundException Thrown if String path does not exist.
 	 */
-	boolean rename(String path, String newpath);
+	void rename(String from, String to) throws FileExistsException, FileNotFoundException;
 
 	/**
 	 * Copy a file.
 	 *
-	 * @param string String path    Path to the existing file.
-	 * @param string newpath The new path of the file.
+	 * @param path    Path to the existing file.
+	 * @param newpath The new path of the file.
 	 * @return bool True on success, false on failure.
 	 * @throws FileExistsException   Thrown if newpath exists.
 	 * @throws FileNotFoundException Thrown if String path does not exist.
 	 */
-	boolean copy(String path, String newpath);
+	void copy(String path, String newpath);
 
 	/**
 	 * Delete a file.

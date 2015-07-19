@@ -3,7 +3,7 @@ package com.flysystem.core.exception;
 /**
  * @author Zeger Hoogeboom
  */
-public class FileExistsException extends Exception
+public class FileExistsException extends FlywayGenericException
 {
 	public FileExistsException(String path)
 	{
