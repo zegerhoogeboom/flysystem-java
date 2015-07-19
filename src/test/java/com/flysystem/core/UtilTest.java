@@ -25,6 +25,7 @@ package com.flysystem.core;
 import com.flysystem.core.util.PathUtil;
 import org.junit.Test;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -47,11 +48,11 @@ public class UtilTest
 			put("dirname/./", "dirname");
 			put("dirname/.", "dirname");
 			put("./dir/../././", "");
-			put("00004869/files/other/10-75..stl", "00004869\\files\\other\\10-75..stl");
-			put("/dirname//subdir///subsubdir", "dirname\\subdir\\subsubdir");
-			put("\\dirname\\\\subdir\\\\\\subsubdir", "dirname\\subdir\\subsubdir");
-			put("\\\\some\\shared\\\\drive", "some\\shared\\drive");
-			put("C:\\dirname\\\\subdir\\\\\\subsubdir", "C:\\dirname\\subdir\\subsubdir");
+			put("00004869/files/other/10-75..stl", String.format("00004869%sfiles%sother%s10-75..stl", File.separator, File.separator, File.separator));
+			put("/dirname//subdir///subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator));
+			put("\\dirname\\\\subdir\\\\\\subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator));
+			put("\\\\some\\shared\\\\drive", String.format("some%sshared%sdrive", File.separator, File.separator));
+			put("C:\\dirname\\\\subdir\\\\\\subsubdir", String.format("C:%sdirname%ssubdir%ssubsubdir", File.separator, File.separator, File.separator));
 //			put("C:\\\\dirname\\subdir\\\\\\\\subsubdir", "C:\\dirname\\subdir\\subsubdir"); //fixme!
 		}};
 		for (Map.Entry<String, String> entry : data.entrySet()) {
