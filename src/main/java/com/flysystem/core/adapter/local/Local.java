@@ -2,7 +2,6 @@ package com.flysystem.core.adapter.local;
 
 import com.flysystem.core.Config;
 import com.flysystem.core.FileMetadata;
-import com.flysystem.core.Filesystem;
 import com.flysystem.core.Visibility;
 import com.flysystem.core.adapter.AbstractAdapter;
 import com.flysystem.core.exception.DirectoryNotFoundException;
@@ -88,20 +87,20 @@ public class Local extends AbstractAdapter
 		return null;
 	}
 
-	public List<com.flysystem.core.File> listContents(Filesystem filesystem, String directory, boolean recursive)
+	public List<FileMetadata> listContents(String directory, boolean recursive)
 	{
 		List<File> files = (List<File>) FileUtils.listFiles(getExistingFile(directory), null, recursive);
-		return LocalFileConverter.doConvert(filesystem, files, getPathPrefix());
+		return FileMetadataConverter.doConvert(files, getPathPrefix());
 	}
 
-	public List<com.flysystem.core.File> listContents(Filesystem filesystem, String directory)
+	public List<FileMetadata> listContents(String directory)
 	{
-		return listContents(filesystem, directory, false);
+		return listContents(directory, false);
 	}
 
 	public FileMetadata getMetadata(String path) throws FileNotFoundException
 	{
-		return new BasicFileAttributesConverter().convert(getExistingFile(path));
+		return new FileMetadataConverter().convert(getExistingFile(path));
 	}
 
 	public long getSize(String path)
@@ -119,7 +118,7 @@ public class Local extends AbstractAdapter
 		return getExistingFile(path).lastModified();
 	}
 
-	public String getVisibility(String path)
+	public Visibility getVisibility(String path)
 	{
 		return null;
 	}
@@ -179,18 +178,20 @@ public class Local extends AbstractAdapter
 	}
 
 
-	public void rename(String from, String to)
+	public boolean rename(String from, String to)
 	{
 		File source = new File(applyPathPrefix(from));
 		File target = new File(applyPathPrefix(to));
 		FileCommands.manipulate(this, source, target, new FileCommands.MoveFileCommand());
+		return true;
 	}
 
-	public void copy(String path, String newpath)
+	public boolean copy(String path, String newpath)
 	{
 		File source = new File(applyPathPrefix(path));
 		File destination = new File(applyPathPrefix(newpath));
 		FileCommands.manipulate(this, source, destination, new FileCommands.CopyFileCommand());
+		return true;
 	}
 
 	public boolean delete(String path)

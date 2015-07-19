@@ -171,7 +171,7 @@ public class File extends Handler
 	 *
 	 * @return string visibility
 	 */
-	public String getVisibility()
+	public Visibility getVisibility()
 	{
 		return this.filesystem.getVisibility(this.path);
 	}

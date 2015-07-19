@@ -2,7 +2,9 @@ package com.flysystem.core;
 
 import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
+import com.flysystem.core.exception.RootViolationException;
 import com.flysystem.core.util.PathUtil;
+import com.google.common.base.Strings;
 
 import java.io.OutputStream;
 import java.util.List;
@@ -51,11 +53,10 @@ public class FilesystemImpl implements Filesystem
 		return null;
 	}
 
-	public List<com.flysystem.core.File> listContents(Filesystem filesystem, String directory, boolean recursive)
+	public List<FileMetadata> listContents(String directory, boolean recursive)
 	{
 		directory = PathUtil.normalizePath(directory);
-		assertPresent(directory);
-		return adapter.listContents(filesystem, directory, recursive);
+		return adapter.listContents(directory, recursive);
 	}
 
 	public FileMetadata getMetadata(String path)
@@ -86,7 +87,7 @@ public class FilesystemImpl implements Filesystem
 		return adapter.getTimestamp(path);
 	}
 
-	public String getVisibility(String path)
+	public Visibility getVisibility(String path)
 	{
 		path = PathUtil.normalizePath(path);
 		assertPresent(path);
@@ -171,7 +172,7 @@ public class FilesystemImpl implements Filesystem
 		return false;
 	}
 
-	public void rename(String from, String to)
+	public boolean rename(String from, String to)
 	{
 		from = PathUtil.normalizePath(from);
 		to = PathUtil.normalizePath(to);
@@ -179,15 +180,17 @@ public class FilesystemImpl implements Filesystem
 		assertAbsent(to);
 		config = withConfigFallback(config);
 		adapter.rename(from, to);
+		return true;
 	}
 
-	public void copy(String path, String newpath)
+	public boolean copy(String path, String newpath)
 	{
 		path = PathUtil.normalizePath(path);
 		newpath = PathUtil.normalizePath(newpath);
 		assertPresent(path);
 		assertAbsent(newpath);
 		adapter.copy(path, newpath);
+		return true;
 	}
 
 	public boolean delete(String path)
@@ -200,7 +203,9 @@ public class FilesystemImpl implements Filesystem
 	public boolean deleteDir(String dirname)
 	{
 		dirname = PathUtil.normalizePath(dirname);
-		assertPresent(dirname);
+		if (Strings.isNullOrEmpty(dirname)) {
+			throw new RootViolationException("Root directories can not be deleted.");
+		}
 		return adapter.deleteDir(dirname);
 	}
 
@@ -212,7 +217,6 @@ public class FilesystemImpl implements Filesystem
 	}
 
 	public boolean createDir(String dirname)
-
 	{
 		return createDir(dirname, new Config());
 	}
@@ -236,6 +240,9 @@ public class FilesystemImpl implements Filesystem
 
 	protected Config withConfigFallback(Config config)
 	{
+		if (config == null) {
+			config = new Config();
+		}
 		return config.setFallback(this.config);
 	}
 }

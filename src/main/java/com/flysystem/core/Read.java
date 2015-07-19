@@ -39,10 +39,9 @@ interface Read
 	 *
 	 * @param directory The directory to list.
 	 * @param recursive Whether to list recursively.
-	 * @param filesystem
 	 * @return A list of file metadata.
 	 */
-	List<File> listContents(Filesystem filesystem, String directory, boolean recursive);
+	List<FileMetadata> listContents(String directory, boolean recursive);
 
 	/**
 	 * Get a file's metadata.
@@ -86,5 +85,5 @@ interface Read
 	 * @return string|false The visibility (public|private) or false on failure.
 	 * @throws FileNotFoundException
 	 */
-	String getVisibility(String path);
+	Visibility getVisibility(String path);
 }

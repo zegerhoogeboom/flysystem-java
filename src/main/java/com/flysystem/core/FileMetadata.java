@@ -14,6 +14,11 @@ public class FileMetadata
 	Long timestamp;
 	String type;
 
+	public FileMetadata(String path)
+	{
+		this.path = path;
+	}
+
 	public FileMetadata(String path, Long size, String visibility, String mimetype, Long timestamp, String type)
 	{
 		this.path = path;
@@ -87,5 +92,23 @@ public class FileMetadata
 	public File getFile()
 	{
 		return new File(path);
+	}
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (! (o instanceof FileMetadata)) return false;
+
+		FileMetadata that = (FileMetadata) o;
+
+		return ! (path != null ? ! path.equals(that.path) : that.path != null);
+
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return path != null ? path.hashCode() : 0;
 	}
 }

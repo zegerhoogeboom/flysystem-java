@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.util.List;
 
 import static junit.framework.TestCase.assertEquals;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Zeger Hoogeboom
@@ -104,8 +106,8 @@ public class LocalAdapterTest
 	@Test
 	public void listContents()
 	{
-		List<File> files = adapter.listContents(null, "");
-		assertThat(files, CoreMatchers.hasItem(new File(null, example)));
+		List<FileMetadata> files = adapter.listContents("");
+		assertThat(files, CoreMatchers.hasItem(new FileMetadata(example)));
 	}
 
 	@Test

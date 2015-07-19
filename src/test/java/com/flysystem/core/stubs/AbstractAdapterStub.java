@@ -2,7 +2,6 @@ package com.flysystem.core.stubs;
 
 import com.flysystem.core.Config;
 import com.flysystem.core.FileMetadata;
-import com.flysystem.core.Filesystem;
 import com.flysystem.core.Visibility;
 import com.flysystem.core.adapter.AbstractAdapter;
 
@@ -29,7 +28,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return null;
 	}
 
-	public List<com.flysystem.core.File> listContents(Filesystem filesystem, String directory, boolean recursive)
+	public List<FileMetadata> listContents(String directory, boolean recursive)
 	{
 		return null;
 	}
@@ -54,7 +53,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return 0;
 	}
 
-	public String getVisibility(String path)
+	public Visibility getVisibility(String path)
 	{
 		return null;
 	}
@@ -99,14 +98,16 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public void rename(String from, String to)
+	public boolean rename(String from, String to)
 	{
 
+		return false;
 	}
 
-	public void copy(String path, String newpath)
+	public boolean copy(String path, String newpath)
 	{
 
+		return false;
 	}
 
 	public boolean delete(String path)

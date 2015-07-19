@@ -2,6 +2,7 @@ package com.flysystem.core;
 
 import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
+import com.flysystem.core.exception.RootViolationException;
 
 import java.io.OutputStream;
 import java.util.Map;
@@ -71,7 +72,7 @@ interface Write
 	 * @throws FileExistsException   Thrown if newpath exists.
 	 * @throws FileNotFoundException Thrown if String path does not exist.
 	 */
-	void rename(String from, String to) throws FileExistsException, FileNotFoundException;
+	boolean rename(String from, String to) throws FileExistsException, FileNotFoundException;
 
 	/**
 	 * Copy a file.
@@ -82,7 +83,7 @@ interface Write
 	 * @throws FileExistsException   Thrown if newpath exists.
 	 * @throws FileNotFoundException Thrown if String path does not exist.
 	 */
-	void copy(String path, String newpath);
+	boolean copy(String path, String newpath);
 
 	/**
 	 * Delete a file.
@@ -96,7 +97,7 @@ interface Write
 	/**
 	 * Delete a directory.
 	 *
-	 * @param string dirname
+	 * @param dirname
 	 * @return bool True on success, false on failure.
 	 * @throws RootViolationException Thrown if dirname is empty.
 	 */

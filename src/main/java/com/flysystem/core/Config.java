@@ -61,5 +61,24 @@ public class Config
 		return this;
 	}
 
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (! (o instanceof Config)) return false;
 
+		Config config = (Config) o;
+
+		if (settings != null ? ! settings.equals(config.settings) : config.settings != null) return false;
+		return ! (fallback != null ? ! fallback.equals(config.fallback) : config.fallback != null);
+
+	}
+
+	@Override
+	public int hashCode()
+	{
+		int result = settings != null ? settings.hashCode() : 0;
+		result = 31 * result + (fallback != null ? fallback.hashCode() : 0);
+		return result;
+	}
 }
