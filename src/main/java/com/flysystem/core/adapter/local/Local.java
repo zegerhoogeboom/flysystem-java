@@ -1,6 +1,8 @@
 package com.flysystem.core.adapter.local;
 
+import com.flysystem.core.FileMetadata;
 import com.flysystem.core.Filesystem;
+import com.flysystem.core.Visibility;
 import com.flysystem.core.adapter.AbstractAdapter;
 import com.flysystem.core.exception.DirectoryNotFoundException;
 import com.flysystem.core.exception.FileNotFoundException;
@@ -31,7 +33,7 @@ public class Local extends AbstractAdapter
 		File realRoot = this.ensureDirectory(root);
 
 		if (! realRoot.isDirectory() || ! realRoot.canRead()) {
-//			throw new InvalidArgumentException(String.format("The root path %s is not readable.", realRoot.getAbsolutePath()));
+			throw new FlywayGenericException(String.format("The root path %s is not readable.", realRoot.getAbsolutePath()));
 		}
 
 		try {
@@ -45,8 +47,7 @@ public class Local extends AbstractAdapter
 
 	public Local(String root)
 	{
-		this.writeFlags = 2;
-		this.linkHandling = 2;
+		this(root, 2, 2);
 	}
 
 	/**
@@ -100,14 +101,16 @@ public class Local extends AbstractAdapter
 		return listContents(filesystem, directory, false);
 	}
 
-	public Map<String, Object> getMetadata(String path)
+	public FileMetadata getMetadata(String path) throws FileNotFoundException
 	{
-		return null;
+		return new BasicFileAttributesConverter().convert(new File(applyPathPrefix(path)));
 	}
 
-	public int getSize(String path)
+	public long getSize(String path)
 	{
-		return 0;
+		File file = new File(path);
+		if (!file.isFile()) throw new FileNotFoundException(path);
+		return file.length();
 	}
 
 	public String getMimetype(String path)
@@ -115,9 +118,9 @@ public class Local extends AbstractAdapter
 		return null;
 	}
 
-	public int getTimestamp(String path)
+	public long getTimestamp(String path)
 	{
-		return 0;
+		return new File(path).lastModified();
 	}
 
 	public String getVisibility(String path)
@@ -218,9 +221,31 @@ public class Local extends AbstractAdapter
 		return new File(applyPathPrefix(dirname)).mkdirs();
 	}
 
-	public boolean setVisibility(String path, String visibility)
+	public boolean setVisibility(String path, Visibility visibility)
 	{
-		return false;
+		switch (visibility) {
+			case PRIVATE: return setVisibilityPrivate(path);
+			case PUBLIC: return setVisibilityPublic(path);
+			default: return false;
+		}
+	}
+
+	private boolean setVisibilityPrivate(String path)
+	{
+		File file = new File(path);
+		boolean readable = file.setReadable(true, true);
+		boolean executable = file.setExecutable(true, true);
+		boolean writable = file.setWritable(true, true);
+		return readable && executable && writable;
+	}
+
+	private boolean setVisibilityPublic(String path)
+	{
+		File file = new File(path);
+		boolean readable = file.setReadable(true, false);
+		boolean executable = file.setExecutable(true, false);
+		boolean writable = file.setWritable(true, false);
+		return readable && executable && writable;
 	}
 
 	private void validateIsDirectoryAndExists(File file) throws DirectoryNotFoundException

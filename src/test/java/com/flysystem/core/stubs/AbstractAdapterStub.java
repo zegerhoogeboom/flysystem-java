@@ -1,6 +1,8 @@
 package com.flysystem.core.stubs;
 
+import com.flysystem.core.FileMetadata;
 import com.flysystem.core.Filesystem;
+import com.flysystem.core.Visibility;
 import com.flysystem.core.adapter.AbstractAdapter;
 
 import java.io.OutputStream;
@@ -32,12 +34,12 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return null;
 	}
 
-	public Map<String, Object> getMetadata(String path)
+	public FileMetadata getMetadata(String path)
 	{
 		return null;
 	}
 
-	public int getSize(String path)
+	public long getSize(String path)
 	{
 		return 0;
 	}
@@ -47,7 +49,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return null;
 	}
 
-	public int getTimestamp(String path)
+	public long getTimestamp(String path)
 	{
 		return 0;
 	}
@@ -127,7 +129,7 @@ public class AbstractAdapterStub extends AbstractAdapter
 		return false;
 	}
 
-	public boolean setVisibility(String path, String visibility)
+	public boolean setVisibility(String path, Visibility visibility)
 	{
 		return false;
 	}

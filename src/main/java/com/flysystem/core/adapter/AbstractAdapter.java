@@ -30,13 +30,23 @@ public abstract class AbstractAdapter implements Adapter
 	public String applyPathPrefix(String path)
 	{
 		path = StringUtils.stripStart(path, "\\/");
-
 		if (path.length() == 0) {
 			return getPathPrefix() != null ? getPathPrefix() : "";
 		}
+		return getPathPrefix() + path;
+	}
 
-		path = getPathPrefix() + path;
+	/**
+	 * Remove a path prefix.
+	 *
+	 * @return string path without the prefix
+	 */
+	public String removePathPrefix(String path)
+	{
+		if (getPathPrefix() == null) {
+			return path;
+		}
 
-		return path;
+		return path.substring(pathPrefix.length());
 	}
 }

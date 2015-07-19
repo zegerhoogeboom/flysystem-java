@@ -6,8 +6,8 @@ package com.flysystem.core.adapter.local;
 public class Permissions
 {
 	public static class File {
-		public static int publicFile = 0744;
-		public static int privateFile = 0700;
+		public static String publicFile = "public";
+		public static String privateFile = "private";
 	}
 	public static class Dir {
 		public static int publicDir = 0755;

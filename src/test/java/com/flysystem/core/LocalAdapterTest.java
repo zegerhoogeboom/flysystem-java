@@ -108,4 +108,11 @@ public class LocalAdapterTest
 		List<File> files = adapter.listContents(null, "");
 		assertThat(files, CoreMatchers.hasItem(new File(null, example)));
 	}
+
+	@Test
+	public void metadata()
+	{
+		FileMetadata metadata = adapter.getMetadata(example);
+		metadata.getMimetype();
+	}
 }

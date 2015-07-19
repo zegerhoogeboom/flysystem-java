@@ -4,7 +4,6 @@ import com.flysystem.core.exception.FileNotFoundException;
 import com.google.common.base.Optional;
 
 import java.io.OutputStream;
-import java.util.Map;
 
 /**
  * @author Zeger Hoogeboom
@@ -151,7 +150,7 @@ public class File extends Handler
 	 *
 	 * @return int unix timestamp
 	 */
-	public int getTimestamp()
+	public long getTimestamp()
 	{
 		return this.filesystem.getTimestamp(this.path);
 	}
@@ -181,7 +180,7 @@ public class File extends Handler
 	 *
 	 * @return array
 	 */
-	public Map<String, Object> getMetadata()
+	public FileMetadata getMetadata()
 	{
 		return this.filesystem.getMetadata(this.path);
 	}
@@ -191,7 +190,7 @@ public class File extends Handler
 	 *
 	 * @return int file size
 	 */
-	public int getSize()
+	public long getSize()
 	{
 		return this.filesystem.getSize(this.path);
 	}

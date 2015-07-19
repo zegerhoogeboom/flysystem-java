@@ -117,6 +117,6 @@ interface Write
 	 * @param string visibility One of 'public' or 'private'.
 	 * @return bool True on success, false on failure.
 	 */
-	boolean setVisibility(String path, String visibility);
+	boolean setVisibility(String path, Visibility visibility);
 
 }

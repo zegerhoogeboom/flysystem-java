@@ -4,6 +4,7 @@ import com.flysystem.core.exception.FileNotFoundException;
 import com.google.common.base.Optional;
 
 import java.io.*;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.List;
 import java.util.Map;
 
@@ -55,7 +56,7 @@ interface Read
 	 * @return array|false The file metadata or false on failure.
 	 * @throws FileNotFoundException
 	 */
-	Map<String, Object> getMetadata(String path);
+	FileMetadata getMetadata(String path);
 
 	/**
 	 * Get a file's size.
@@ -63,7 +64,7 @@ interface Read
 	 * @param string String path The path to the file.
 	 * @return int|false The file size or false on failure.
 	 */
-	int getSize(String path);
+	long getSize(String path);
 
 	/**
 	 * Get a file's mime-type.
@@ -81,7 +82,7 @@ interface Read
 	 * @return string|false The timestamp or false on failure.
 	 * @throws FileNotFoundException
 	 */
-	int getTimestamp(String path);
+	long getTimestamp(String path);
 
 	/**
 	 * Get a file's visibility.

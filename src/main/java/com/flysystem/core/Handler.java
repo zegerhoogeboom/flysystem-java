@@ -1,7 +1,5 @@
 package com.flysystem.core;
 
-import java.util.Map;
-
 /**
  * @author Zeger Hoogeboom
  */
@@ -43,8 +41,8 @@ abstract class Handler
 	 */
 	public String getType()
 	{
-		Map<String, Object> metadata = this.filesystem.getMetadata(this.path);
-		return (String) metadata.get("type");
+		FileMetadata metadata = this.filesystem.getMetadata(this.path);
+		return (String) metadata.getType();
 	}
 
 

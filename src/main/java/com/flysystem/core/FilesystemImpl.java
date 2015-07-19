@@ -49,12 +49,12 @@ public class FilesystemImpl implements Filesystem
 		return null;
 	}
 
-	public Map<String, Object> getMetadata(String path)
+	public FileMetadata getMetadata(String path)
 	{
 		return null;
 	}
 
-	public int getSize(String path)
+	public long getSize(String path)
 	{
 		return 0;
 	}
@@ -64,7 +64,7 @@ public class FilesystemImpl implements Filesystem
 		return null;
 	}
 
-	public int getTimestamp(String path)
+	public long getTimestamp(String path)
 	{
 		return 0;
 	}
@@ -169,7 +169,7 @@ public class FilesystemImpl implements Filesystem
 		return false;
 	}
 
-	public boolean setVisibility(String path, String visibility)
+	public boolean setVisibility(String path, Visibility visibility)
 	{
 		return false;
 	}
