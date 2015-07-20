@@ -22,6 +22,7 @@
 
 package com.flysystem.core;
 
+import com.flysystem.core.util.FlysystemTestUtil;
 import com.flysystem.core.util.PathUtil;
 import org.junit.Test;
 
@@ -59,5 +60,12 @@ public class UtilTest
 			String result = PathUtil.normalizePath(entry.getKey());
 			assertEquals(entry.getValue(), result);
 		}
+	}
+
+	@Test
+	public void testMimetypeGuess()
+	{
+		String mimeType = PathUtil.guessMimeType(FlysystemTestUtil.getRoot() + "example.txt");
+		assertEquals("text/plain", mimeType);
 	}
 }
