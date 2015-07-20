@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class Directory extends Handler
 {
-	public Directory(FilesystemImpl filesystem, String path) {
+	public Directory(Filesystem filesystem, String path) {
 		super(filesystem, path);
 	}
 
