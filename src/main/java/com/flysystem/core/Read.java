@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * @author Zeger Hoogeboom
  */
-interface Read
+public interface Read
 {
 	/**
 	 * Check whether a file exists.

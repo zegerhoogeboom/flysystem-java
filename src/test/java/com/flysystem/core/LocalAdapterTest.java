@@ -26,6 +26,7 @@ import com.flysystem.core.adapter.local.Local;
 import com.flysystem.core.exception.DirectoryNotFoundException;
 import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
+import com.flysystem.core.exception.FlysystemGenericException;
 import com.flysystem.core.util.FlysystemTestUtil;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,6 +52,12 @@ public class LocalAdapterTest
 	{
 		adapter = new Local(FlysystemTestUtil.getRoot(), 2, 2);
 		example = "example.txt";
+	}
+
+	@Test(expected = FlysystemGenericException.class)
+	public void constructorWithFileAsRoot()
+	{
+		new Local(FlysystemTestUtil.getRoot() + "example.txt");
 	}
 
 	@Test
@@ -128,6 +135,24 @@ public class LocalAdapterTest
 	{
 		List<FileMetadata> files = adapter.listContents("");
 		assertThat(files, hasItem(new FileMetadata(example)));
+	}
+
+	@Test
+	public void getSize()
+	{
+		adapter.write("temp.txt", "test");
+		long size = adapter.getSize("temp.txt");
+		assertEquals(size, 4);
+		adapter.delete("temp.txt");
+	}
+
+	@Test
+	public void setPrivateVisibility()
+	{
+		adapter.write("temp.txt", "test", Config.withVisibility(Visibility.PRIVATE));
+		Visibility visibility = adapter.getVisibility("temp.txt");
+//		assertEquals(Visibility.PRIVATE, visibility); //fixme, might just not work on windows.
+		adapter.delete("temp.txt");
 	}
 
 	@Test

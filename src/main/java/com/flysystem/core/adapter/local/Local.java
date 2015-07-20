@@ -136,15 +136,17 @@ public class Local extends AbstractAdapter
 
 	public Visibility getVisibility(String path)
 	{
-		return null;
+		File file = new File(applyPathPrefix(path));
+		if (file.canExecute() && file.canRead() && file.canWrite()) return Visibility.PUBLIC;
+		return Visibility.PRIVATE;
 	}
 
 	public boolean write(String path, String contents, Config config)
 	{
 		try {
 			File file = new File(applyPathPrefix(path));
-			setPermissions(file, config);
 			FileUtils.write(file, contents);
+			setPermissions(file, config);
 			return true;
 		} catch (IOException e) {
 			throw new FlysystemGenericException(e);
@@ -238,17 +240,17 @@ public class Local extends AbstractAdapter
 
 	private boolean setVisibilityPrivate(File file)
 	{
-		boolean readable = file.setReadable(true, true);
-		boolean executable = file.setExecutable(true, true);
-		boolean writable = file.setWritable(true, true);
+		boolean readable = file.setReadable(false);
+		boolean executable = file.setExecutable(false);
+		boolean writable = file.setWritable(false);
 		return readable && executable && writable;
 	}
 
 	private boolean setVisibilityPublic(File file)
 	{
-		boolean readable = file.setReadable(true, false);
-		boolean executable = file.setExecutable(true, false);
-		boolean writable = file.setWritable(true, false);
+		boolean readable = file.setReadable(true);
+		boolean executable = file.setExecutable(true);
+		boolean writable = file.setWritable(true);
 		return readable && executable && writable;
 	}
 
