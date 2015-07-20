@@ -1,3 +1,4 @@
 language: java
 after_success:
-- coveralls
+  - mvn coveralls:report
+  - coveralls
