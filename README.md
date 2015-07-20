@@ -1,6 +1,6 @@
 # Flysystem - Java
 
-[![Build Status](https://magnum.travis-ci.com/zegerhoogeboom/flysystem-java.svg?token=bkz3bHxvUhYPhCsgqp9s&branch=master)](https://magnum.travis-ci.com/zegerhoogeboom/flysystem-java)
+[![Build Status](https://travis-ci.org/zegerhoogeboom/flysystem-java.svg?branch=master)](https://travis-ci.org/zegerhoogeboom/flysystem-java)
 [![Coverage Status](https://coveralls.io/repos/zegerhoogeboom/flysystem-java/badge.svg?branch=master&service=github)](https://coveralls.io/github/zegerhoogeboom/flysystem-java?branch=master)
 [![Software License](https://img.shields.io/badge/license-MIT-brightgreen.svg?style=flat-square)](LICENSE)
 
