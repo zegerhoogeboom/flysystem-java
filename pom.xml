@@ -96,7 +96,7 @@
                     <outputDirectory>${basedir}/target</outputDirectory>
                     <format>xml</format>
                     <maxmem>256m</maxmem>
-                    <check/>
+                    <check>true</check>
                 </configuration>
             </plugin>
         </plugins>
