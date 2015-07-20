@@ -26,9 +26,6 @@ import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.flysystem.core.exception.RootViolationException;
 
-import java.io.OutputStream;
-import java.util.Map;
-
 /**
  * @author Zeger Hoogeboom
  */
@@ -46,21 +43,6 @@ interface Write
 	boolean write(String path, String contents, Config config);
 	boolean write(String path, String contents);
 
-
-	/**
-	 * Write a new file using a stream.
-	 *
-	 * @param path     The path of the new file.
-	 * @param resource resource The file handle.
-	 * @param config   An optional configuration array.
-	 * @return bool True on success, false on failure.
-	 * @throws InvalidArgumentException If resource is not a file handle.
-	 * @throws FileExistsException
-	 */
-	boolean writeStream(String path, OutputStream resource, Config config);
-	boolean writeStream(String path, OutputStream resource);
-
-
 	/**
 	 * Update an existing file.
 	 *
@@ -71,19 +53,6 @@ interface Write
 	 */
 	boolean update(String path, String contents);
 	boolean update(String path, String contents, Config config);
-
-	/**
-	 * Update an existing file using a stream.
-	 *
-	 * @param path     The path of the existing file.
-	 * @param resource resource The file handle.
-	 * @param config   An optional configuration array.
-	 * @return bool True on success, false on failure.
-	 * @throws InvalidArgumentException If resource is not a file handle.
-	 * @throws FileNotFoundException
-	 */
-	boolean updateStream(String path, OutputStream resource, Config config);
-	boolean updateStream(String path, OutputStream resource);
 
 	/**
 	 * Rename a file.
@@ -110,7 +79,7 @@ interface Write
 	/**
 	 * Delete a file.
 	 *
-	 * @param string String path
+	 * @param path
 	 * @return bool True on success, false on failure.
 	 * @throws FileNotFoundException
 	 */
@@ -128,8 +97,8 @@ interface Write
 	/**
 	 * Create a directory.
 	 *
-	 * @param string dirname The name of the new directory.
-	 * @param array  config  An optional configuration array.
+	 * @param dirname The name of the new directory.
+	 * @param config  An optional configuration array.
 	 * @param config
 	 * @return bool True on success, false on failure.
 	 */
@@ -139,8 +108,8 @@ interface Write
 	/**
 	 * Set the visibility for a file.
 	 *
-	 * @param string String path       The path to the file.
-	 * @param string visibility One of 'public' or 'private'.
+	 * @param path The path to the file.
+	 * @param visibility One of 'public' or 'private'.
 	 * @return bool True on success, false on failure.
 	 */
 	boolean setVisibility(String path, Visibility visibility);

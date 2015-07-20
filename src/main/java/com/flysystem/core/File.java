@@ -26,8 +26,6 @@ import com.flysystem.core.exception.FileExistsException;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.google.common.base.Optional;
 
-import java.io.OutputStream;
-
 /**
  * @author Zeger Hoogeboom
  */
@@ -65,16 +63,6 @@ public class File extends Handler
 	}
 
 	/**
-	 * Read the file as a stream.
-	 *
-	 * @return resource file stream
-	 */
-	public String readStream()
-	{
-		return this.filesystem.readStream(this.path);
-	}
-
-	/**
 	 * Write the new file.
 	 *
 	 * @return bool success boolean
@@ -82,17 +70,6 @@ public class File extends Handler
 	public boolean write(String content)
 	{
 		return this.filesystem.write(this.path, content);
-	}
-
-	/**
-	 * Write the new file using a stream.
-	 *
-	 * @param resource resource
-	 * @return bool success boolean
-	 */
-	public boolean writeStream(OutputStream resource)
-	{
-		return this.filesystem.writeStream(this.path, resource);
 	}
 
 	/**
@@ -106,17 +83,6 @@ public class File extends Handler
 	}
 
 	/**
-	 * Update the file contents with a stream.
-	 *
-	 * @param resource resource
-	 * @return bool success boolean
-	 */
-	public boolean updateStream(OutputStream resource)
-	{
-		return this.filesystem.updateStream(this.path, resource);
-	}
-
-	/**
 	 * Create the file or update if exists.
 	 *
 	 * @return bool success boolean
@@ -124,17 +90,6 @@ public class File extends Handler
 	public boolean put(String content)
 	{
 		return this.filesystem.put(this.path, content);
-	}
-
-	/**
-	 * Create the file or update if exists using a stream.
-	 *
-	 * @param resource resource
-	 * @return bool success boolean
-	 */
-	public boolean putStream(OutputStream resource)
-	{
-		return this.filesystem.putStream(this.path, resource);
 	}
 
 	/**

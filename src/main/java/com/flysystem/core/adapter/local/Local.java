@@ -34,7 +34,6 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.Charset;
 import java.util.List;
 
@@ -104,11 +103,6 @@ public class Local extends AbstractAdapter
 		}
 	}
 
-	public String readStream(String path)
-	{
-		return null;
-	}
-
 	public List<FileMetadata> listContents(String directory, boolean recursive)
 	{
 		List<File> files = (List<File>) FileUtils.listFiles(getExistingFile(directory), null, recursive);
@@ -162,16 +156,6 @@ public class Local extends AbstractAdapter
    	    return write(path, contents, new Config());
 	}
 
-	public boolean writeStream(String path, OutputStream resource, Config config)
-	{
-		return false;
-	}
-
-	public boolean writeStream(String path, OutputStream resource)
-	{
-		return false;
-	}
-
 	public boolean update(String path, String contents)
 	{
 		return update(path, contents, new Config());
@@ -188,17 +172,6 @@ public class Local extends AbstractAdapter
 			throw new FlysystemGenericException(e);
 		}
 	}
-
-	public boolean updateStream(String path, OutputStream resource, Config config)
-	{
-		return false;
-	}
-
-	public boolean updateStream(String path, OutputStream resource)
-	{
-		return false;
-	}
-
 
 	public boolean rename(String from, String to)
 	{

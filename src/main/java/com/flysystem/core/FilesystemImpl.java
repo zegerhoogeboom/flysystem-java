@@ -28,9 +28,7 @@ import com.flysystem.core.exception.RootViolationException;
 import com.flysystem.core.util.PathUtil;
 import com.google.common.base.Strings;
 
-import java.io.OutputStream;
 import java.util.List;
-import java.util.Map;
 
 /**
  * @author Zeger Hoogeboom
@@ -129,16 +127,6 @@ public class FilesystemImpl implements Filesystem
 		return put(path, contents, new Config());
 	}
 
-	public boolean putStream(String path, OutputStream resource, Map<String, Object> config)
-	{
-		return false;
-	}
-
-	public boolean putStream(String path, OutputStream resource)
-	{
-		return false;
-	}
-
 	public String readAndDelete(String path)
 	{
 		path = PathUtil.normalizePath(path);
@@ -161,16 +149,6 @@ public class FilesystemImpl implements Filesystem
 		return write(path, contents, new Config());
 	}
 
-	public boolean writeStream(String path, OutputStream resource, Config config)
-	{
-		return false;
-	}
-
-	public boolean writeStream(String path, OutputStream resource)
-	{
-		return false;
-	}
-
 	public boolean update(String path, String contents, Config config)
 	{
 		path = PathUtil.normalizePath(path);
@@ -182,16 +160,6 @@ public class FilesystemImpl implements Filesystem
 	public boolean update(String path, String contents)
 	{
 		return update(path, contents, new Config());
-	}
-
-	public boolean updateStream(String path, OutputStream resource, Config config)
-	{
-		return false;
-	}
-
-	public boolean updateStream(String path, OutputStream resource)
-	{
-		return false;
 	}
 
 	public boolean rename(String from, String to)

@@ -48,15 +48,6 @@ interface Read
 	String read(String path) throws FileNotFoundException;
 
 	/**
-	 * Retrieves a read-stream for a path.
-	 *
-	 * @param path The path to the file.
-	 * @return resource|false The path resource or false on failure.
-	 * @throws FileNotFoundException
-	 */
-	String readStream(String path);
-
-	/**
 	 * List contents of a directory.
 	 *
 	 * @param directory The directory to list.
