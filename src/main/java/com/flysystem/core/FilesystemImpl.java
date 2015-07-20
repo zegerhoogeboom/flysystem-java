@@ -47,7 +47,21 @@ public class FilesystemImpl implements Filesystem
 
 	public Handler get(String path, Handler handler)
 	{
-		return null;
+		path = PathUtil.normalizePath(path);
+
+		if (handler == null) {
+			FileMetadata metadata = getMetadata(path);
+			return metadata.isFile() ? new File(this, path) : new Directory(this, path);
+		}
+
+		handler.setPath(path);
+		handler.setFilesystem(this);
+		return handler;
+	}
+
+	public Handler get(String path)
+	{
+		return get(path, null);
 	}
 
 	public Filesystem addPlugin(Plugin plugin)
@@ -66,11 +80,6 @@ public class FilesystemImpl implements Filesystem
 		path = PathUtil.normalizePath(path);
 		assertPresent(path);
 		return adapter.read(path);
-	}
-
-	public String readStream(String path)
-	{
-		return null;
 	}
 
 	public List<FileMetadata> listContents(String directory, boolean recursive)

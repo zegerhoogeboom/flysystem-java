@@ -116,6 +116,11 @@ public class FileMetadata
 		return new File(path);
 	}
 
+	public boolean isFile()
+	{
+		return "file".equals(getType());
+	}
+
 	@Override
 	public boolean equals(Object o)
 	{

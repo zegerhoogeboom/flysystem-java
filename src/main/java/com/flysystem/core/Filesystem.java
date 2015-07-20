@@ -32,9 +32,17 @@ public interface Filesystem extends Read, Write, Update
 	 *
 	 * @param path The path to the file.
 	 * @param handler An optional existing handler to populate.
-	 * @return Handler Either a file or directory handler.
+	 * @return Either a file or directory handler.
 	 */
 	Handler get(String path, Handler handler);
+
+	/**
+	 * Get a file/directory handler.
+	 *
+	 * @param path The path to the file.
+	 * @return Either a file or directory handler.
+	 */
+	Handler get(String path);
 
 	/**
 	 * Register a plugin.
