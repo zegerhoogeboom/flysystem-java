@@ -1,3 +1,3 @@
 language: java
 after_success:
-  - mvn clean -DserviceJobId=$TRAVIS_JOB_ID cobertura:cobertura coveralls:report
+  - mvn -DserviceJobId=$TRAVIS_JOB_ID cobertura:cobertura coveralls:report
