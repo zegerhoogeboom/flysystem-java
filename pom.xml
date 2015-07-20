@@ -85,8 +85,6 @@
                         </coberturaReport>
                     </coberturaReports>
                     <sourceEncoding>UTF-8</sourceEncoding>
-                    <serviceName>travis-ci</serviceName>
-                    <serviceJobId>${env.TRAVIS_JOB_ID} </serviceJobId>
                 </configuration>
 
             </plugin>
