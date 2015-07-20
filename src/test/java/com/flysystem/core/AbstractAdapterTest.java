@@ -22,27 +22,29 @@
 
 package com.flysystem.core;
 
-import com.flysystem.core.stubs.AbstractAdapterStub;
+import com.flysystem.core.adapter.AbstractAdapter;
 import com.flysystem.core.util.FlysystemTestUtil;
 import com.google.common.base.Strings;
 import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 import java.io.File;
 
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * @author Zeger Hoogeboom
  */
 public class AbstractAdapterTest
 {
-	AbstractAdapterStub stub;
+	AbstractAdapter stub;
 
 	@Before
 	public void setUp() throws Exception
 	{
-		stub = new AbstractAdapterStub();
+		stub = mock(AbstractAdapter.class, Mockito.CALLS_REAL_METHODS);
 	}
 
 	@Test
