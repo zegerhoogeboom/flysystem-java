@@ -50,6 +50,11 @@ public class Config
 		}});
 	}
 
+	public Object get(String key)
+	{
+		return get(key, null);
+	}
+
 	public Object get(String key, Object defaultValue)
 	{
 		if (! this.settings.containsKey(key)) {
