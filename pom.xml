@@ -85,6 +85,7 @@
                         </coberturaReport>
                     </coberturaReports>
                     <sourceEncoding>UTF-8</sourceEncoding>
+                    <repoToken>${env.repoToken}</repoToken>
                 </configuration>
 
             </plugin>
