@@ -55,8 +55,9 @@ public class FileMetadataConverter extends Converter<File, FileMetadata>
 		FileMetadataConverter fileMetadataConverter = new FileMetadataConverter();
 		List<FileMetadata> convertedFiles = new ArrayList<>();
 		for (File file : files) {
-			file = new File(file.getPath().replace(pathPrefix, ""));
-			convertedFiles.add(fileMetadataConverter.convert(file));
+			FileMetadata converted = fileMetadataConverter.convert(file);
+			converted.setPath(converted.getPath().replace(pathPrefix, ""));
+			convertedFiles.add(converted);
 		}
 		return convertedFiles;
 	}
