@@ -71,7 +71,7 @@ public interface Read
 	 * @param path The path to the file.
 	 * @return int|false The file size or false on failure.
 	 */
-	long getSize(String path);
+	Long getSize(String path);
 
 	/**
 	 * Get a file's mime-type.
@@ -89,7 +89,7 @@ public interface Read
 	 * @return string|false The timestamp or false on failure.
 	 * @throws FileNotFoundException
 	 */
-	long getTimestamp(String path);
+	Long getTimestamp(String path);
 
 	/**
 	 * Get a file's visibility.

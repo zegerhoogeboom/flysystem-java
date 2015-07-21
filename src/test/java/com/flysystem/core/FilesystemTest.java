@@ -220,8 +220,8 @@ public class FilesystemTest
 	public void getSize()
 	{
 		when(mockedAdapter.has(path)).thenReturn(true);
-		when(mockedAdapter.getSize(path)).thenReturn(4l);
-		assertEquals(4l, filesystem.getSize(path));
+		when(mockedAdapter.getSize(path)).thenReturn(4L);
+		assertEquals(4L, (long) filesystem.getSize(path));
 	}
 
 	@Test

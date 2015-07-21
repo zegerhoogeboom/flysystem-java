@@ -95,7 +95,7 @@ public class FilesystemImpl implements Filesystem
 		return adapter.getMetadata(path);
 	}
 
-	public long getSize(String path)
+	public Long getSize(String path)
 	{
 		path = PathUtil.normalizePath(path);
 		assertPresent(path);
@@ -109,7 +109,7 @@ public class FilesystemImpl implements Filesystem
 		return adapter.getMimetype(path);
 	}
 
-	public long getTimestamp(String path)
+	public Long getTimestamp(String path)
 	{
 		path = PathUtil.normalizePath(path);
 		assertPresent(path);

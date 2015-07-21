@@ -119,7 +119,7 @@ public class Local extends AbstractAdapter
 		return new FileMetadataConverter().convert(getExistingFile(path));
 	}
 
-	public long getSize(String path)
+	public Long getSize(String path)
 	{
 		return getExistingFile(path).length();
 	}
@@ -129,7 +129,7 @@ public class Local extends AbstractAdapter
 		return null;
 	}
 
-	public long getTimestamp(String path)
+	public Long getTimestamp(String path)
 	{
 		return getExistingFile(path).lastModified();
 	}

@@ -31,7 +31,7 @@ public class FileMetadata
 {
 	String path;
 	Long size;
-	String visibility;
+	Visibility visibility;
 	String mimetype;
 	Long timestamp;
 	String type;
@@ -41,7 +41,7 @@ public class FileMetadata
 		this.path = path;
 	}
 
-	public FileMetadata(String path, Long size, String visibility, String mimetype, Long timestamp, String type)
+	public FileMetadata(String path, Long size, Visibility visibility, String mimetype, Long timestamp, String type)
 	{
 		this.path = path;
 		this.size = size;
@@ -71,12 +71,12 @@ public class FileMetadata
 		this.size = size;
 	}
 
-	public String getVisibility()
+	public Visibility getVisibility()
 	{
 		return visibility;
 	}
 
-	public void setVisibility(String visibility)
+	public void setVisibility(Visibility visibility)
 	{
 		this.visibility = visibility;
 	}

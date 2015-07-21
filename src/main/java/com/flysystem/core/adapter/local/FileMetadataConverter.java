@@ -23,6 +23,7 @@
 package com.flysystem.core.adapter.local;
 
 import com.flysystem.core.FileMetadata;
+import com.flysystem.core.MetadataWrapper;
 import com.flysystem.core.exception.FileNotFoundException;
 import com.flysystem.core.util.PathUtil;
 import com.google.common.base.Converter;
@@ -60,5 +61,11 @@ public class FileMetadataConverter extends Converter<File, FileMetadata>
 			convertedFiles.add(converted);
 		}
 		return convertedFiles;
+	}
+
+	public MetadataWrapper fromPath(String path, Object object)
+	{
+		FileMetadata metadata = this.convert(new File(path));
+		return new MetadataWrapper(metadata, object);
 	}
 }
