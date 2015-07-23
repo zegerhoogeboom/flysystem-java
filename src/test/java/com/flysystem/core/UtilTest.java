@@ -24,42 +24,48 @@ package com.flysystem.core;
 
 import com.flysystem.core.util.FlysystemTestUtil;
 import com.flysystem.core.util.PathUtil;
+import com.tngtech.java.junit.dataprovider.DataProvider;
+import com.tngtech.java.junit.dataprovider.DataProviderRunner;
+import com.tngtech.java.junit.dataprovider.UseDataProvider;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
 
 import static junit.framework.TestCase.assertEquals;
 
 /**
  * @author Zeger Hoogeboom
  */
+@RunWith(DataProviderRunner.class)
 public class UtilTest
 {
 
+	@DataProvider
+	public static Object[][] dataProviderNormalizePath() {
+		return new Object[][] {
+				{"/dirname/", "dirname"},
+				{"dirname/..", ""},
+				{"dirname/../", ""},
+				{"dirname./", "dirname."},
+				{"dirname/./", "dirname"},
+				{"dirname/.", "dirname"},
+				{"./dir/../././", ""},
+				{"00004869/files/other/10-75..stl", String.format("00004869%sfiles%sother%s10-75..stl", File.separator, File.separator, File.separator)},
+				{"/dirname//subdir///subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator)},
+				{"\\dirname\\\\subdir\\\\\\subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator)},
+				{"\\\\some\\shared\\\\drive", String.format("some%sshared%sdrive", File.separator, File.separator)},
+				{"C:\\dirname\\\\subdir\\\\\\subsubdir", String.format("C:%sdirname%ssubdir%ssubsubdir", File.separator, File.separator, File.separator)}
+//				{"C:\\\\dirname\\subdir\\\\\\\\subsubdir", "C:\\dirname\\subdir\\subsubdir"} //fixme!
+		};
+	}
+
 	@Test
-	public void testNormalizePath()
+	@UseDataProvider("dataProviderNormalizePath")
+	public void testNormalizePath(String original, String expected)
 	{
-		Map<String, String> data = new HashMap<String, String>() {{
-			put("/dirname/", "dirname");
-			put("dirname/..", "");
-			put("dirname/../", "");
-			put("dirname./", "dirname.");
-			put("dirname/./", "dirname");
-			put("dirname/.", "dirname");
-			put("./dir/../././", "");
-			put("00004869/files/other/10-75..stl", String.format("00004869%sfiles%sother%s10-75..stl", File.separator, File.separator, File.separator));
-			put("/dirname//subdir///subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator));
-			put("\\dirname\\\\subdir\\\\\\subsubdir", String.format("dirname%ssubdir%ssubsubdir", File.separator, File.separator));
-			put("\\\\some\\shared\\\\drive", String.format("some%sshared%sdrive", File.separator, File.separator));
-			put("C:\\dirname\\\\subdir\\\\\\subsubdir", String.format("C:%sdirname%ssubdir%ssubsubdir", File.separator, File.separator, File.separator));
-//			put("C:\\\\dirname\\subdir\\\\\\\\subsubdir", "C:\\dirname\\subdir\\subsubdir"); //fixme!
-		}};
-		for (Map.Entry<String, String> entry : data.entrySet()) {
-			String result = PathUtil.normalizePath(entry.getKey());
-			assertEquals(entry.getValue(), result);
-		}
+		String result = PathUtil.normalizePath(original);
+		assertEquals(expected, result);
 	}
 
 	@Test
